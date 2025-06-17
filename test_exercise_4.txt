@@ -1,0 +1,23 @@
+>>> from exercise_2 import extract_currency, extract_amount, calculate_expense, convert_expense
+>>> extract_currency("235 EUR")
+'EUR'
+>>> extract_currency("")
+''
+>>> extract_amount("1029 USD")
+1029
+>>> extract_amount("")
+-1
+
+>>> round(calculate_expense("D:230 EUR"), 1)
+0.0
+>>> round(calculate_expense("PM:120 USD"), 1)
+108.0
+>>> round(calculate_expense("T:110 AUD"), 1)
+71.5
+
+>>> convert_expense("D:230 EUR")
+'0 EUR'
+>>> convert_expense("PM:120 USD")
+'108 EUR'
+>>> convert_expense("T:110 AUD")
+'72 EUR'

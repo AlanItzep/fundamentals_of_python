@@ -1,0 +1,9 @@
+>>> from exercise_2 import remove_comments
+>>> remove_comments("Python (a powerful language) is fun.")
+'Python is fun.'
+>>> remove_comments("This is (just) a test (really).")
+'This is a test.'
+>>> remove_comments("No comments here.")
+'No comments here.'
+>>> remove_comments("(start) Only text.")
+'Only text.'

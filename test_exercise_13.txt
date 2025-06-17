@@ -1,0 +1,9 @@
+>>> from exercise_2 import adjust_numbers
+>>> adjust_numbers("I ran 5 kilometers and drank 2 liters of water.", 1)
+'I ran 6 kilometers and drank 3 liters of water.'
+>>> adjust_numbers("Today I have 3 meetings.", 2)
+'Today I have 5 meetings.'
+>>> adjust_numbers("No numbers here!", 10)
+'No numbers here!'
+>>> adjust_numbers("The event starts at 9 and ends at 14.", 1)
+'The event starts at 10 and ends at 15.'

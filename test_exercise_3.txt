@@ -1,0 +1,9 @@
+>>> from exercise_2 import expand_years
+>>> expand_years("The First World War lasted from year 14 to year 18")
+'The First World War lasted from year 1914 to year 1918'
+>>> expand_years("From year 36 to year 39 we had the Spanish Civil War")
+'From year 1936 to year 1939 we had the Spanish Civil War'
+>>> expand_years("Year 69 was when humans reached the Moon")
+'Year 1969 was when humans reached the Moon'
+>>> expand_years("The 20th century is fascinating")
+'The 20th century is fascinating'

@@ -1,0 +1,18 @@
+
+>>> from exercise_2 import reverse1, reverse2
+>>> reverse1("It rains and shines")
+'senihs dna sniar tI'
+>>> reverse1("dog")
+'god'
+>>> reverse1("")
+''
+>>> reverse1("a")
+'a'
+>>> reverse2("It rains and shines")
+'senihs dna sniar tI'
+>>> reverse2("dog")
+'god'
+>>> reverse2("")
+''
+>>> reverse2("a")
+'a'
