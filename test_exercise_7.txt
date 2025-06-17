@@ -1,0 +1,5 @@
+>>> from exercise_2 import is_alphabetical
+>>> is_alphabetical("abcdef")
+True
+>>> is_alphabetical("adfrget")
+False

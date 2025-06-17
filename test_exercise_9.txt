@@ -1,0 +1,11 @@
+>>> from exercise_2 import contains_uppercase, check_password
+>>> contains_uppercase("05687xsdD")
+True
+>>> check_password("myStrongPassword", "myStrongPassword")
+1
+>>> check_password("aNewOne", "myStrongPassword")
+2
+>>> check_password("thenewone", "myStrongPassword")
+3
+>>> check_password("theNewOne", "myStrongPassword")
+0

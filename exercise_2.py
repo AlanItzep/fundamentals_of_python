@@ -141,7 +141,7 @@ def reverse2(text):
 6. Common Characters
 Design the function common_chars(s1, s2) that returns a string containing characters that are in both inputs, without duplicates, and in the order they appear in s1.
 """
-"""
+
 def common_chars(s1, s2):
     chars_in_common = ""
     for char in s1:
@@ -151,24 +151,21 @@ def common_chars(s1, s2):
             ""
     return chars_in_common
 
-print(common_chars("sausages", "salsa"))
-print(common_chars("orange", "pepper"))
-print(common_chars("potato", "aubergine"))
-"""
+#print(common_chars("sausages", "salsa"))
+#print(common_chars("orange", "pepper"))
+#print(common_chars("potato", "aubergine"))
 
 """
 7. Alphabetical Order
 Design the function is_alphabetical(s) that returns True if the lowercase letters in the string are in alphabetical order.
 """
-"""
+
 def is_alphabetical(s):
     lowercase_letters = [char for char in s if char.islower()]
     return lowercase_letters == sorted(lowercase_letters)
 
-print(is_alphabetical("abcdef"))
-print(is_alphabetical("adfrget"))
-"""
-
+#print(is_alphabetical("abcdef"))
+#print(is_alphabetical("adfrget"))
 
 """
 8. Counting Letters
@@ -177,7 +174,6 @@ Design the function count_case(text) that returns two values, the number of uppe
 Design the function vowel_percentage(text) that returns the percentage of vowels over the total number of letters in the input string (including spaces and punctuation).
 """
 
-"""
 def count_case(text):
     lowercase_letters = [char for char in text if char.islower()]
     is_number= [char for char in text if char.isdecimal()]
@@ -201,7 +197,6 @@ def vowel_percentage(text):
 #print(count_case("The theory of relativity was published in 1905"))
 #print(round(vowel_percentage("NASA launched the James Webb Space Telescope in 2021"), 2)) ##>> valores de resultado diferentes
 #print(round(vowel_percentage("The theory of relativity was published in 1905"), 2)) ##>> valores de resultado diferentes
-"""
 
 """
 9. Password Validation
@@ -217,7 +212,7 @@ Design the function check_password(new, old) that returns:
 
 In all other cases, we will consider the password valid and return 0.
 """
-"""
+
 def contains_uppercase(text):
     result = [char for char in text if char.isupper()]
     return bool(result)
@@ -234,12 +229,11 @@ def check_password(new, old):
     else:
         return 0
 
-print(contains_uppercase("05687xsdD"))
-print(check_password("myStrongPassword", "myStrongPassword"))
-print(check_password("aNewOne", "myStrongPassword"))
-print(check_password("thenewone", "myStrongPassword"))
-print(check_password("theNewOne", "myStrongPassword"))
-"""
+#print(contains_uppercase("05687xsdD"))
+#print(check_password("myStrongPassword", "myStrongPassword"))
+#print(check_password("aNewOne", "myStrongPassword"))
+#print(check_password("thenewone", "myStrongPassword"))
+#print(check_password("theNewOne", "myStrongPassword"))
 
 """
 10. Validate e-Mail Address
@@ -268,7 +262,7 @@ Domain (after the @):
 * The domain may contain digits and hyphens, but only letters are allowed in the TLD
 
 """
-"""
+
 def is_valid_email(email):
     # Revisar que al menos tenga un arroba
     if email.count("@") != 1:
@@ -324,7 +318,7 @@ def is_valid_email(email):
 # print(is_valid_email("john.@example.com"))
 # print(is_valid_email("john@domain.9g"))
 # print(is_valid_email("john@domain.g1"))
-"""
+
 """
 11. Add Line Numbers to a Multiline String
 Design the function number_lines(text) that receives a string containing multiple lines (separated by newline characters \n), 
@@ -336,8 +330,8 @@ One using a for loop with range
 
 Another using a while loop
 """
-"""
-def number_lines(text):
+
+def number_lines1(text):
     new_text = ""
     line_start = 0
     line_number = 1
@@ -351,9 +345,9 @@ def number_lines(text):
         new_text += f"{line_number}: {text[line_start:]}"
 
     return new_text
-"""
-"""
-def number_lines(text):
+
+
+def number_lines2(text):
     new_text = ""
     line_start = 0
     line_number = 1
@@ -371,7 +365,7 @@ def number_lines(text):
         new_text += f"{line_number}: {text[line_start:]}"
 
     return new_text
-"""
+
 
 # print(number_lines("First line\nSecond line\nThird line"))
 # 1: First line
@@ -384,6 +378,7 @@ def number_lines(text):
 
 # print(number_lines(""))
 #(an empty string)
+
 """
 12. Remove Parenthesized Comments from a String
 Design the function remove_comments(text) that receives a string and returns a new string with all content enclosed in parentheses removed, including the parentheses themselves.

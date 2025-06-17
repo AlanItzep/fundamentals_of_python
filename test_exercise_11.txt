@@ -1,0 +1,23 @@
+>>> from exercise_2 import number_lines1, number_lines2
+>>> print(number_lines1("First line\nSecond line\nThird line"))
+1: First line
+2: Second line
+3: Third line
+
+>>> print(number_lines1("Alpha\nBeta"))
+1: Alpha
+2: Beta
+
+>>> print(number_lines1(""))
+(an empty string)
+>>> print(number_lines2("First line\nSecond line\nThird line"))
+1: First line
+2: Second line
+3: Third line
+
+>>> print(number_lines2("Alpha\nBeta"))
+1: Alpha
+2: Beta
+
+>>> print(number_lines2(""))
+(an empty string)

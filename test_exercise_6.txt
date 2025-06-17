@@ -1,0 +1,7 @@
+>>> from exercise_2 import common_chars
+>>> common_chars("sausages", "salsa")
+'sa'
+>>> common_chars("orange", "pepper")
+'re'
+>>> common_chars("potato", "aubergine")
+'a'

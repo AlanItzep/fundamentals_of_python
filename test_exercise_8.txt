@@ -1,0 +1,9 @@
+>>> from exercise_2 import count_case, vowel_percentage
+>>> count_case("NASA launched the James Webb Space Telescope in 2021")
+(8, 36)
+>>> count_case("The theory of relativity was published in 1905")
+(1, 38)
+>>> round(vowel_percentage("NASA launched the James Webb Space Telescope in 2021"), 2)
+36.36
+>>> round(vowel_percentage("The theory of relativity was published in 1905"), 2)
+33.33

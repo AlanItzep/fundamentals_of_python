@@ -1,0 +1,19 @@
+>>> from exercise_2 import is_valid_email
+>>> is_valid_email("john@example.com")
+True
+>>> is_valid_email("john@example.c")
+False
+>>> is_valid_email("john@123domain.com")
+False
+>>> is_valid_email("john@.example.com")
+False
+>>> is_valid_email("john@example-.com")
+False
+>>> is_valid_email("john@example123.com")
+True
+>>> is_valid_email("john.@example.com")
+False
+>>> is_valid_email("john@domain.9g")
+False
+>>> is_valid_email("john@domain.g1")
+False
