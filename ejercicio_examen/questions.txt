@@ -1,0 +1,100 @@
+1 -How do you include a doctest for a function?
+By embedding an interactive example in the function's docstring, TRUE 
+By using >>> followed by expected output, TRUE 
+By writing comments starting with //test, FALSE
+By importing the doctest module, FALSe
+2 -What is required for a function to be testable with doctest?
+The function must be decorated with @doctest, FALSE
+The function must be defined in a separate module, FALSE
+The examples must follow the format >>> input and expected output, TRUE
+The function must have a properly formatted docstring with examples, TRUE
+3 -Which of the following can be tested using doctest?
+Timing performance, FALSE
+Numeric return values, TRUE
+Graphical output, FALSE
+String return values, TRUE
+4 -What is returned by doctest.testmod()?
+Number of tests that failed, TRUE
+Total number of tests executed, TRUE
+A list of failed tests, FALSE
+Detailed error messages, FALSE
+5 -Which modules are imported to run doctests?
+doctest, TRUE
+math, FALSE
+target module (with tested functions), TRUE
+testmod, FALSE
+6 -Which of the following are valid outputs in doctest?
+Exact string matching, TRUE
+Different floating-point formatting (e.g., 2.0 vs 2.000), FALSE
+Whitespace-sensitive comparison, TRUE
+Numeric and string values, TRUE
+7 -Which symbol is used in doctest to denote a Python prompt?
+//, FALSE
+>>>, TRUE
+>>>, but is optional, FALSE 
+$$, FALSE
+8 -What is a common use case of doctest.testfile()?
+To test syntax errors, FALSE
+To test examples located in a text file, TRUE
+To check code samples in documentation files, TRUE
+To validate external examples without importing the module, TRUE
+9 -Which of the following statements about accessing docstrings is true?
+You can access a docstring using the .__doc__ attribute, TRUE
+You can access a docstring using the help() function, TRUE
+You can access a docstring using the dir() function, FALSE
+You can access a docstring importing the module doctest, FALSE
+10 -Which file types are supported by doctest.testfile()?
+Binary files, FALSE
+HTML files, FALSE
+Plain text files (.txt), TRUE
+Compiled Python files (.pyc), FALSE
+11 -When does doctest run the examples written in a module's docstrings?
+When doctest.testmod() is called, TRUE
+Automatically every time the module is imported, FALSE
+When the module is executed with `python -m doctest, TRUE
+Automatically every time the module is saved, FALSE
+12 -Which Python commands allow executing external doctest files from the terminal?
+python -m doctest -v filename.txt, TRUE
+python doctest filename.txt, FALSE
+python -m doctest filename, FALSE
+python -m doctest -v filename.py, FALSE
+13 -What happens if the actual output does not match the expected output in a doctest?
+Python continues without notifying the failure, FALSE
+The test result summary is updated with failures, TRUE
+The test fails and an error message is shown, TRUE
+The function is skipped, FALSE
+14 -Which command runs doctest on a file from the terminal?
+doctest.run(file.py), FALSE
+python -m doctest -v file.py, TRUE
+pytest file.py, FALSE
+python -m doctest -v -f file.py, TRUE
+15 -What is the purpose of the doctest module in Python?
+To automatically test examples embedded in docstrings, TRUE
+To generate documentation in HTML format, FALSE
+To compile Python code faster, FALSE
+To ensure that code behaves as shown in its documentation, TRUE
+16 -Which options allow running doctests from an external text file in a Python script?
+doctest.testmod(), FALSE
+doctest.run(), FALSE
+help(doctest), FALSE
+doctest.testfile(), TRUE
+17 -What does doctest.testmod() do?
+Reports mismatches and successes, TRUE
+It scans docstrings in a module, TRUE
+It runs embedded tests found in docstrings, TRUE
+It validates syntax in your code or docstrings, FALSE
+18 -Why might a doctest fail even if the output is logically correct?
+Due to a TypeError, FALSE
+Due to whitespace differences, TRUE
+Due to float precision issues, TRUE
+Because doctest uses strict string comparison, TRUE
+19 -Which are advantages of using doctest?
+It hides errors from users, FALSE
+It increases code performance, FALSE
+It serves as both test and documentation, TRUE
+It keeps tests close to the code, TRUE
+20 -How do you indicate output in a doctest example?
+Return value shown as if from interactive shell, TRUE
+By writing it after the line starting with >>>, TRUE
+Using comments to show output, FALSE
+By prefixing the line with >>>, FALSE
