@@ -94,12 +94,18 @@ class QuizScreen(tk.Frame):
     def __init__(self, master, preguntas, tiempo_limite=None):
         super().__init__(master)
         self.master = master
-        self.preguntas = preguntas
+
+        # ¡CAMBIO AQUÍ! Barajar las preguntas al inicio
+        self.preguntas = preguntas[:] # Hacemos una copia para no modificar la lista original si se reusa
+        random.shuffle(self.preguntas) 
+
         self.tiempo_limite = tiempo_limite
         self.tiempo_restante = tiempo_limite
         self.timer_id = None
         self.has_finished = False # Nuevo: banderín para saber si el quiz ha terminado
 
+        # Nuevo: para el temporizador ascendente en modo sin límite
+        self.start_time = None 
 
         self.opciones_seleccionadas_vars = {} 
         self.checkbuttons_referencia = {}
@@ -109,7 +115,12 @@ class QuizScreen(tk.Frame):
         self.cargar_todas_las_preguntas()
 
         if self.tiempo_limite is not None:
-            self.iniciar_temporizador()
+            self.iniciar_temporizador_descendente() # Renombramos para claridad
+            self.boton_volver_inicio.pack(side="left", padx=10) # Empaquetar a la izquierda del temporizador
+        else:
+            self.iniciar_temporizador_ascendente() # Nuevo: inicia el temporizador que cuenta hacia arriba
+            self.boton_volver_inicio.pack(side="left", padx=10) # Empaquetar a la izquierda del temporizador
+
 
     # ... (el resto del código de QuizScreen, incluyendo crear_widgets, _on_mouse_wheel, 
     #      iniciar_temporizador, actualizar_temporizador, cargar_todas_las_preguntas, 
@@ -142,20 +153,33 @@ class QuizScreen(tk.Frame):
         elif event.num == 4 or event.delta == 120:
             self.canvas.yview_scroll(-1,"units")
 
-    def iniciar_temporizador(self):
+    def iniciar_temporizador_descendente(self):
         if self.tiempo_restante is not None:
-            self.actualizar_temporizador()
+            self.actualizar_temporizador_descendente()
 
-    def actualizar_temporizador(self):
+    def actualizar_temporizador_descendente(self):
         if self.tiempo_restante is not None and self.tiempo_restante >= 0:
             minutos = self.tiempo_restante // 60
             segundos = self.tiempo_restante % 60
             self.timer_label.config(text=f"Tiempo restante: {minutos:02}:{segundos:02}")
             self.tiempo_restante -= 1
-            self.timer_id = self.after(1000, self.actualizar_temporizador)
+            self.timer_id = self.after(1000, self.actualizar_temporizador_descendente) 
         else:
             self.timer_label.config(text="¡Tiempo agotado!", fg="red")
             self.procesar_respuestas(tiempo_agotado=True)
+
+    # ¡NUEVO! Temporizador que cuenta hacia arriba
+    def iniciar_temporizador_ascendente(self):
+        self.start_time = time.time() # Guarda el momento de inicio
+        self.actualizar_temporizador_ascendente()
+
+    def actualizar_temporizador_ascendente(self):
+        if not self.has_finished: # Solo actualiza si el quiz no ha terminado
+            elapsed_time = int(time.time() - self.start_time)
+            minutos = elapsed_time // 60
+            segundos = elapsed_time % 60
+            self.timer_label.config(text=f"Tiempo transcurrido: {minutos:02}:{segundos:02}")
+            self.timer_id = self.after(1000, self.actualizar_temporizador_ascendente)
 
     def cargar_todas_las_preguntas(self):
         for idx, preg in enumerate(self.preguntas, 1):
@@ -210,6 +234,20 @@ class QuizScreen(tk.Frame):
         self.boton_enviar.config(state=tk.DISABLED) # Deshabilita el botón de enviar
         self.has_finished = True # Marca el quiz como terminado
 
+        # Si el quiz terminó por tiempo agotado (modo descendente)
+        if tiempo_agotado:
+            final_time_message = "" # No mostramos tiempo transcurrido, solo agotado
+        else: # Si el quiz se envió manualmente (modo ascendente o descendente)
+            if self.tiempo_limite is None and self.start_time is not None:
+                # Calculamos el tiempo final para el modo ascendente
+                final_elapsed_time = int(time.time() - self.start_time)
+                min_final = final_elapsed_time // 60
+                seg_final = final_elapsed_time % 60
+                final_time_message = f"Tu tiempo: {min_final:02}:{seg_final:02}\n"
+            else:
+                final_time_message = "" # Si había límite, el tiempo ya se mostró como agotado o restante
+
+
         correctas_count = 0
 
         for idx_pregunta_mostrada, opciones_vars_de_esta_pregunta in self.opciones_seleccionadas_vars.items():
@@ -255,12 +293,18 @@ class QuizScreen(tk.Frame):
         mensaje_final = ""
         if tiempo_agotado:
             mensaje_final = "¡Tiempo agotado!\n"
+        
+        # ¡CAMBIO AQUÍ! Añadimos el tiempo transcurrido si corresponde
+        mensaje_final += final_time_message 
         mensaje_final += f"Has respondido {correctas_count} de {len(self.preguntas)} preguntas correctamente."
+        
 
         messagebox.showinfo("Quiz Finalizado", mensaje_final)
 
         # ¡NUEVO! Mostrar el botón "Volver al Inicio" una vez que el quiz ha terminado
-        self.boton_volver_inicio.pack(side="right", padx=10)
+        # ¡CAMBIO AQUÍ! Mostrar el botón "Volver al Inicio" siempre al finalizar
+        self.boton_volver_inicio.pack(side="right", padx=10) # Aseguramos que se empaqueta
+        self.timer_label.config(fg="black") # Resetea el color del temporizador
 
     def volver_a_inicio(self):
         """Destruye la QuizScreen actual y vuelve a crear la InicioScreen."""
