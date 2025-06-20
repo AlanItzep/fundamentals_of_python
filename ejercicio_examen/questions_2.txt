@@ -1,0 +1,150 @@
+1 -Which of the following are valid Python variable names?
+my_var = 1, TRUE
+si 3value = 5, FALSE
+value3 = 8, TRUE
+my-var = 9, FALSE
+2 -Which of the following expressions return the boolean value True?
+x = bool("false"), TRUE
+bool(0.0), FALSE
+3 < 5 and 2 != 4, TRUE
+not (5 == 5 and False), TRUE
+3 -Which expressions evaluate to True?
+print( 3 != 5), TRUE
+print( 4 < 4 ), FALSE
+print( 7 <= 7 ), TRUE
+print( 9 == 10 ), FALSE
+4 -Which of the following are Python keywords?
+def, TRUE
+True, TRUE
+value, FALSE
+return, TRUE
+5 -Which statements are correct about the print() function?
+It can print multiple values., TRUE
+It returns the printed value., FALSE
+It can be called without arguments., TRUE
+It creates variables., FALSE
+6 -Which of the following function calls are valid?
+len("abc"), TRUE
+int("42.5"), FALSE
+str(True), TRUE
+abs(-3.5), TRUE
+7 -What are valid results of the expression round(2.756, 2)?
+2.75, FALSE
+2.76, TRUE
+2.8, FALSE
+3.0, FALSE
+8 -Which operations are valid on two strings?
+"hi" + "there", TRUE
+"hi" * 3, TRUE
+"hi" - "i", FALSE
+"hi" / "i", FALSE
+9 -What are possible outputs of type(3)?
+<class 'int'>, TRUE
+<type 'int'>, FALSE
+int, FALSE
+<class 'float'>, FALSE
+10 -What can be true about floating-point comparisons?
+0.1 + 0.2 == 0.3 may be False, TRUE
+abs(a - b) < epsilon is a safe test, TRUE
+float values are always exact, FALSE
+Equality with floats is reliable for all cases, FALSE
+11 -Which of the following are boolean expressions?
+4 < 5, TRUE
+"a" == "b", TRUE
+not True, TRUE
+5 + 2, FALSE
+12 -Which statements about logical operators are correct?
+and returns True if both parts are true, TRUE
+or returns False if both are false, TRUE
+not inverts the truth value, TRUE
+and means “either this or that”, FALSE
+13 -Which expressions evaluate to False?
+5 < 3, TRUE
+not True, TRUE
+4 == 4, FALSE
+True and False, TRUE
+14 -What are valid uses of the if statement?
+if x > 0:, TRUE
+if x == y then:, FALSE
+if (x < 10):, TRUE
+if x >= 3: print(x), TRUE
+15 -What blocks require indentation in Python?
+if, TRUE
+def, TRUE
+for, TRUE
+print, FALSE
+16 -Which of the following define functions correctly?
+def greet(name):, TRUE
+function greet():, FALSE
+def add(x, y): return x + y, TRUE
+def(x): return x * x, FALSE
+17 -What are true about the return statement?
+It sends a result back to the caller, TRUE
+It ends function execution, TRUE
+A function can return multiple values, TRUE
+It is optional in all functions, FALSE
+18 -Which are examples of chained conditionals?
+if x < 0: ... elif x == 0: ... else: ..., TRUE
+if x < 0 or x == 0 or x > 0:, FALSE
+if x < 10:, FALSE
+elif x > 10:, FALSE
+19 -What are correct uses of pass?
+As a placeholder when a block is required, TRUE
+To skip a line of code, FALSE
+To silence syntax errors, FALSE
+To leave an if or else body empty, TRUE
+20 -Which of the following expressions use valid multiple comparison?
+if 1 < x <= 10:, TRUE
+if x != 5 != y:, FALSE
+if 0 < x and x < 100:, TRUE
+if x < (y < 10):, FALSE
+21 -What are correct ternary expressions?
+a if cond else b, TRUE
+if cond then a else b, FALSE
+"Yes" if x > 5 else "No", TRUE
+x ? "yes" : "no", FALSE
+22 -What can be used in a match-case block?
+match value:, TRUE
+case "hello":, TRUE
+case _:, TRUE
+if case == ..., FALSE
+23 -What are true about the match-case structure?
+It matches values like a switch, TRUE
+It requires Python 3.10 or newer, TRUE
+case _: acts as “default”, TRUE
+You must use parentheses after match, FALSE
+24 -Which values are considered falsy in Python?
+[] (empty list), TRUE
+0.0, TRUE
+"", TRUE
+"0", FALSE
+25 -What are valid ways to read and convert user input?
+input("Enter: "), TRUE
+int(input("Enter a number: ")), TRUE
+input(), TRUE
+float("3.14"), FALSE
+26 -What can be used to check the available names in a module?
+dir(math), TRUE
+help(math), TRUE
+list(math), FALSE
+math.contents(), FALSE
+27 -Which of the following are expression statements in Python?
+print("Hi"), TRUE
+x + 3, TRUE
+len("text"), TRUE
+"hello" + "world", TRUE
+28 -What are correct statements about local variables?
+They only exist inside the function body, TRUE
+Their names can be the same as global variables, TRUE
+They are shared across all functions, FALSE
+They are declared with var keyword, FALSE
+29 -What can be used to convert between types?
+int("5"), TRUE
+float("3.14"), TRUE
+str(5.5), TRUE
+toString(5), FALSE
+30 -What does the following code print? def example(): pass print(example())
+None, TRUE
+0, FALSE
+'', FALSE
+Error, FALSE
