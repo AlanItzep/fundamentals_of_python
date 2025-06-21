@@ -1,5 +1,21 @@
 # Mi Juego de Preguntas (Quiz App)
 
+## Tabla de Contenidos
+* [Características Principales](#características-principales)
+* [Cómo Utilizar y Crear tus Propios Cuestionarios](#cómo-utilizar-y-crear-tus-propios-cuestionarios)
+    * [1. Formato del Archivo de Cuestionario (.txt)](#1-formato-del-archivo-de-cuestionario-txt)
+    * [2. Preparación y Ejecución del Programa](#2-preparación-y-ejecución-del-programa)
+    * [3. Funcionalidad de las Ventanas](#3-funcionalidad-de-las-ventanas)
+        * [A. Pantalla de Inicio (InicioScreen)](#a-pantalla-de-inicio-inicioscreen)
+        * [B. Pantalla del Quiz (QuizScreen)](#b-pantalla-del-quiz-quizscreen)
+        * [C. Pantalla de Estadísticas (StatsScreen)](#c-pantalla-de-estadísticas-statsscreen)
+* [Funcionamiento Interno (Detrás de Escena)](#funcionamiento-interno-detrás-de-escena)
+    * [1. Estructura de la Aplicación](#1-estructura-de-la-aplicación)
+    * [2. Carga y Mezcla de Preguntas/Respuestas](#2-carga-y-mezcla-de-preguntasrespuestas)
+    * [3. Gestión de la Base de Datos](#3-gestión-de-la-base-de-datos)
+
+---
+
 Esta es una aplicación de escritorio simple pero funcional desarrollada en Python utilizando Tkinter para la interfaz gráfica. Permite a los usuarios realizar cuestionarios personalizados, guardar sus resultados y visualizar estadísticas de rendimiento.
 
 ## Características Principales
