@@ -1,64 +1,61 @@
+import os
 import tkinter as tk
-from tkinter import messagebox, filedialog # Importa filedialog
+from tkinter import messagebox, filedialog
 import random
 import time
-from quiz_utils import cargar_preguntas # Importa la función de utilidad
+from quiz_utils import cargar_preguntas
+from quiz_database import QuizDatabase
 
 class InicioScreen(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, db_instance, app_instance):
         super().__init__(master)
         self.master = master
-        self.pack(fill="both", expand=True)
+        self.db = db_instance
+        self.app = app_instance
 
-        # Nuevo: tk.StringVar para guardar y mostrar la ruta del archivo seleccionado
         self.selected_file_path = tk.StringVar(value="No se ha seleccionado archivo") 
         self.quiz_filename = "questions.txt" # Nombre de archivo por defecto
 
         self.crear_widgets()
+        self.selected_file_path.set(f"Usando por defecto: {os.path.basename(self.quiz_filename)}")
 
-    # ... (el resto del código de InicioScreen, incluyendo toggle_tiempo_input y iniciar_quiz)
     def crear_widgets(self):
         tk.Label(self, text="Configuración del Quiz", font=("Arial", 16, "bold")).pack(pady=20)
 
         # Sección de selección de archivo
         tk.Label(self, text="Archivo del Quiz:", font=("Arial", 12)).pack(pady=(10, 0))
-        # Etiqueta para mostrar la ruta del archivo seleccionado
         tk.Label(self, textvariable=self.selected_file_path, font=("Arial", 10), fg="blue").pack(pady=(0, 10))
         tk.Button(self, text="Seleccionar Archivo de Quiz", command=self.seleccionar_archivo_quiz, font=("Arial", 10)).pack(pady=5)
         
-        # Texto por defecto para la ruta del archivo si no se selecciona explícitamente ninguno
-        self.selected_file_path.set(f"Usando por defecto: {self.quiz_filename}")
+        # El valor por defecto ya se establece en __init__
 
-        # Separador para mayor claridad
         tk.Frame(self, height=2, bd=1, relief=tk.SUNKEN).pack(fill="x", padx=20, pady=10)
 
-        # Opciones de temporizador existentes
+        # Opciones de temporizador
         self.usar_temporizador_var = tk.BooleanVar(value=False)
         tk.Checkbutton(self, text="Usar Temporizador", variable=self.usar_temporizador_var, 
                        command=self.toggle_tiempo_input, font=("Arial", 12)).pack(pady=5)
         tk.Label(self, text="Tiempo límite (minutos):", font=("Arial", 12)).pack(pady=5)
         self.tiempo_entrada = tk.Entry(self, width=10, font=("Arial", 12))
-        self.tiempo_entrada.insert(0, "2") # Valor por defecto: 2 minutos (antes era 120 segundos)
+        self.tiempo_entrada.insert(0, "2")
         self.tiempo_entrada.pack(pady=5)
 
         tk.Button(self, text="Iniciar Quiz", command=self.iniciar_quiz, font=("Arial", 14, "bold")).pack(pady=20)
+        tk.Button(self, text="Ver Estadísticas", command=self.ver_estadisticas, font=("Arial", 12)).pack(pady=10)
 
         self.toggle_tiempo_input()
     
     def seleccionar_archivo_quiz(self):
-        # Abre un cuadro de diálogo de selección de archivo para que el usuario elija un archivo .txt
         file_path = filedialog.askopenfilename(
             title="Selecciona un archivo de preguntas",
             filetypes=[("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")]
         )
-        if file_path: # Si se seleccionó un archivo
+        if file_path:
             self.quiz_filename = file_path
-            # Actualiza la ruta de archivo mostrada (solo muestra el nombre del archivo para abreviar)
-            self.selected_file_path.set(f"Archivo seleccionado: {self.quiz_filename.split('/')[-1]}") 
+            self.selected_file_path.set(f"Archivo seleccionado: {os.path.basename(self.quiz_filename)}") 
         else:
-            # Si no se selecciona ningún archivo, vuelve al por defecto o informa al usuario
-            self.selected_file_path.set(f"Usando por defecto: {self.quiz_filename.split('/')[-1]}") # Sigue mostrando el por defecto si el usuario cancela
-            self.quiz_filename = "questions.txt" # Asegúrate de que el por defecto esté activo si se cancela el diálogo
+            self.quiz_filename = "questions.txt" 
+            self.selected_file_path.set(f"Usando por defecto: {os.path.basename(self.quiz_filename)}") 
 
     def toggle_tiempo_input(self):
         if self.usar_temporizador_var.get():
@@ -74,57 +71,94 @@ class InicioScreen(tk.Frame):
                 if tiempo_en_minutos <= 0:
                     messagebox.showerror("Error de Tiempo", "El tiempo debe ser un número positivo de minutos.")
                     return
-                tiempo_limite = tiempo_en_minutos * 60 # Convertir a segundos para el temporizador
+                tiempo_limite = tiempo_en_minutos * 60
             except ValueError:
                 messagebox.showerror("Error de Tiempo", "Por favor, introduce un número válido para los minutos del tiempo límite.")
                 return
         
-        # Pasa el nombre del archivo seleccionado a cargar_preguntas
         preguntas_cargadas = cargar_preguntas(self.quiz_filename) 
         if not preguntas_cargadas:
             return
 
-        self.destroy() 
-        # Aquí pasamos la referencia al objeto 'master' (la ventana principal)
-        # para que QuizScreen pueda llamarla al querer volver.
-        QuizScreen(self.master, preguntas_cargadas, tiempo_limite)
+        # Ahora show_frame acepta los kwargs y los pasa a QuizScreen.iniciar_quiz_data
+        self.app.show_frame("QuizScreen", 
+                            preguntas=preguntas_cargadas, 
+                            tiempo_limite=tiempo_limite, 
+                            quiz_filename=self.quiz_filename)
+
+    def ver_estadisticas(self):
+        self.app.show_frame("StatsScreen")
+
+    def salir_app(self):
+        self.app.on_closing()
 
 
 class QuizScreen(tk.Frame):
-    def __init__(self, master, preguntas, tiempo_limite=None):
+    # MODIFICADO: No espera las preguntas/tiempo en __init__.
+    # Se le pasa la instancia de la app y la DB, pero los datos del quiz se pasan después.
+    def __init__(self, master, db_instance, app_instance):
         super().__init__(master)
         self.master = master
+        self.db = db_instance
+        self.app = app_instance # Guarda la referencia a MainApp
 
-        # ¡CAMBIO AQUÍ! Barajar las preguntas al inicio
-        self.preguntas = preguntas[:] # Hacemos una copia para no modificar la lista original si se reusa
-        random.shuffle(self.preguntas) 
+        # Inicializa variables que serán establecidas por iniciar_quiz_data
+        self.preguntas = []
+        self.tiempo_limite = None
+        self.tiempo_restante = None
+        self.quiz_filename = "unknown"
 
-        self.tiempo_limite = tiempo_limite
-        self.tiempo_restante = tiempo_limite
         self.timer_id = None
-        self.has_finished = False # Nuevo: banderín para saber si el quiz ha terminado
-
-        # Nuevo: para el temporizador ascendente en modo sin límite
+        self.has_finished = False 
         self.start_time = None 
 
         self.opciones_seleccionadas_vars = {} 
         self.checkbuttons_referencia = {}
 
-        self.pack(fill="both", expand=True)
+        # Una sola llamada a crear_widgets
         self.crear_widgets()
+        # No se llama a cargar_todas_las_preguntas ni iniciar_temporizador aquí,
+        # lo hará iniciar_quiz_data cuando MainApp lo muestre.
+
+    def iniciar_quiz_data(self, preguntas, tiempo_limite, quiz_filename):
+        """
+        Método para inicializar los datos del quiz y empezar el temporizador.
+        Llamado por MainApp cuando se muestra QuizScreen.
+        """
+        self.preguntas = preguntas[:] 
+        random.shuffle(self.preguntas)
+
+        self.tiempo_limite = tiempo_limite
+        self.tiempo_restante = tiempo_limite
+        self.quiz_filename = quiz_filename
+
+        self.has_finished = False 
+        self.boton_enviar.config(state=tk.NORMAL) 
+
+        # Limpiar preguntas anteriores y crear nuevas
+        for widget in self.scrollable_frame.winfo_children():
+            widget.destroy()
+        self.opciones_seleccionadas_vars = {} 
+        self.checkbuttons_referencia = {}
+
         self.cargar_todas_las_preguntas()
 
+        if self.timer_id:
+            self.after_cancel(self.timer_id)
+            self.timer_id = None
+        
+        self.start_time = None 
+        self.timer_label.config(fg="black") 
+
         if self.tiempo_limite is not None:
-            self.iniciar_temporizador_descendente() # Renombramos para claridad
-            self.boton_volver_inicio.pack(side="left", padx=10) # Empaquetar a la izquierda del temporizador
+            self.iniciar_temporizador_descendente()
         else:
-            self.iniciar_temporizador_ascendente() # Nuevo: inicia el temporizador que cuenta hacia arriba
-            self.boton_volver_inicio.pack(side="left", padx=10) # Empaquetar a la izquierda del temporizador
+            self.iniciar_temporizador_ascendente()
+        
+        # Asegúrate de ocultar el botón de volver al inicio al empezar un nuevo quiz
+        self.boton_volver_inicio.pack_forget()
 
 
-    # ... (el resto del código de QuizScreen, incluyendo crear_widgets, _on_mouse_wheel, 
-    #      iniciar_temporizador, actualizar_temporizador, cargar_todas_las_preguntas, 
-    #      y procesar_respuestas)
     def crear_widgets(self):
         self.top_frame = tk.Frame(self, bg="#e0e0e0", padx=10, pady=5)
         self.top_frame.pack(side="top", fill="x")
@@ -133,9 +167,8 @@ class QuizScreen(tk.Frame):
         self.boton_enviar = tk.Button(self.top_frame, text="Enviar Respuestas", command=self.procesar_respuestas, font=("Arial", 12))
         self.boton_enviar.pack(side="right", padx=10)
 
-        # ¡NUEVO! Botón para volver a la pantalla inicial (inicialmente oculto o deshabilitado)
         self.boton_volver_inicio = tk.Button(self.top_frame, text="Volver al Inicio", command=self.volver_a_inicio, font=("Arial", 12))
-        # No lo empaquetamos aquí; lo haremos visible después de procesar_respuestas
+        # No lo empaquetamos aquí; se empaqueta después de procesar_respuestas
 
         self.canvas = tk.Canvas(self, borderwidth=0, background="#f0f0f0")
         self.canvas.pack(side="left", fill="both", expand=True)
@@ -168,13 +201,12 @@ class QuizScreen(tk.Frame):
             self.timer_label.config(text="¡Tiempo agotado!", fg="red")
             self.procesar_respuestas(tiempo_agotado=True)
 
-    # ¡NUEVO! Temporizador que cuenta hacia arriba
     def iniciar_temporizador_ascendente(self):
-        self.start_time = time.time() # Guarda el momento de inicio
+        self.start_time = time.time() 
         self.actualizar_temporizador_ascendente()
 
     def actualizar_temporizador_ascendente(self):
-        if not self.has_finished: # Solo actualiza si el quiz no ha terminado
+        if not self.has_finished: 
             elapsed_time = int(time.time() - self.start_time)
             minutos = elapsed_time // 60
             segundos = elapsed_time % 60
@@ -224,29 +256,29 @@ class QuizScreen(tk.Frame):
             self.checkbuttons_referencia[idx] = opciones_checkbuttons_de_esta_pregunta 
 
     def procesar_respuestas(self, tiempo_agotado=False):
-        if self.has_finished: # Evita procesar dos veces si ya se terminó el quiz
+        if self.has_finished: 
             return
         
         if self.timer_id:
             self.after_cancel(self.timer_id)
             self.timer_id = None
 
-        self.boton_enviar.config(state=tk.DISABLED) # Deshabilita el botón de enviar
-        self.has_finished = True # Marca el quiz como terminado
+        self.boton_enviar.config(state=tk.DISABLED) 
+        self.has_finished = True 
 
-        # Si el quiz terminó por tiempo agotado (modo descendente)
+        final_time_for_db = None 
+
         if tiempo_agotado:
-            final_time_message = "" # No mostramos tiempo transcurrido, solo agotado
-        else: # Si el quiz se envió manualmente (modo ascendente o descendente)
+            final_time_message = "" 
+        else: 
             if self.tiempo_limite is None and self.start_time is not None:
-                # Calculamos el tiempo final para el modo ascendente
                 final_elapsed_time = int(time.time() - self.start_time)
                 min_final = final_elapsed_time // 60
                 seg_final = final_elapsed_time % 60
                 final_time_message = f"Tu tiempo: {min_final:02}:{seg_final:02}\n"
+                final_time_for_db = final_elapsed_time 
             else:
-                final_time_message = "" # Si había límite, el tiempo ya se mostró como agotado o restante
-
+                final_time_message = "" 
 
         correctas_count = 0
 
@@ -294,22 +326,22 @@ class QuizScreen(tk.Frame):
         if tiempo_agotado:
             mensaje_final = "¡Tiempo agotado!\n"
         
-        # ¡CAMBIO AQUÍ! Añadimos el tiempo transcurrido si corresponde
         mensaje_final += final_time_message 
         mensaje_final += f"Has respondido {correctas_count} de {len(self.preguntas)} preguntas correctamente."
         
-
         messagebox.showinfo("Quiz Finalizado", mensaje_final)
 
-        # ¡NUEVO! Mostrar el botón "Volver al Inicio" una vez que el quiz ha terminado
-        # ¡CAMBIO AQUÍ! Mostrar el botón "Volver al Inicio" siempre al finalizar
-        self.boton_volver_inicio.pack(side="right", padx=10) # Aseguramos que se empaqueta
-        self.timer_label.config(fg="black") # Resetea el color del temporizador
+        if self.db: 
+            display_filename = os.path.basename(self.quiz_filename)
+            self.db.save_attempt(
+                quiz_filename=display_filename,
+                correct_answers=correctas_count,
+                total_questions=len(self.preguntas),
+                time_taken_seconds=final_time_for_db 
+            )
+
+        self.boton_volver_inicio.pack(side="right", padx=10) 
+        self.timer_label.config(fg="black") 
 
     def volver_a_inicio(self):
-        """Destruye la QuizScreen actual y vuelve a crear la InicioScreen."""
-        self.destroy() # Destruye este frame (QuizScreen)
-        # Recrea la pantalla de inicio usando la ventana principal (master)
-        # La referencia a master se pasa desde MainApp a InicioScreen, y de InicioScreen a QuizScreen
-        from quiz_screens import InicioScreen # Importa de nuevo para asegurar
-        InicioScreen(self.master) # Recrea la pantalla inicial
+        self.app.show_frame("InicioScreen")
