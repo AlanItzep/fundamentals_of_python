@@ -34,10 +34,15 @@ La aplicación carga las preguntas de archivos de texto simple (`.txt`). Es cruc
 Cada pregunta debe seguir el siguiente patrón:
 
 [Número de Pregunta] - [Texto de la Pregunta]
+
 [Opción 1], [TRUE/FALSE]
+
 [Opción 2], [TRUE/FALSE]
+
 [Opción 3], [TRUE/FALSE]
+
 [Opción 4], [TRUE/FALSE]
+
 
 
 **Puntos Clave del Formato:**
@@ -54,21 +59,35 @@ Cada pregunta debe seguir el siguiente patrón:
 
 **Ejemplo de un archivo `questions.txt` válido:**
 
-1 - ¿Cuál es la capital de Francia?
-París, TRUE
-Madrid, FALSE
-Londres, FALSE
-Roma, FALSE
-2 - ¿Qué planeta es conocido como el Planeta Rojo?
-Venus, FALSE
-Marte, TRUE
-Júpiter, FALSE
-Saturno, FALSE
-3 - ¿Qué lenguaje de programación se utiliza para desarrollar esta aplicación?
-Java, FALSE
-C++, FALSE
-Python, TRUE
-JavaScript, FALSE
+    1 - ¿Cuál es la capital de Francia?
+
+    París, TRUE
+
+    Madrid, FALSE
+
+    Londres, FALSE
+
+    Roma, FALSE
+
+    2 - ¿Qué planeta es conocido como el Planeta Rojo?
+
+    Venus, FALSE
+
+    Marte, TRUE
+
+    Júpiter, FALSE
+
+    Saturno, FALSE
+
+    3 - ¿Qué lenguaje de programación se utiliza para desarrollar esta aplicación?
+
+    Java, FALSE
+
+    C++, FALSE
+
+    Python, TRUE
+
+    JavaScript, FALSE
 
 
 ### 2. Preparación y Ejecución del Programa
