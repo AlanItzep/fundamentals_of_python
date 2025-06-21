@@ -151,7 +151,7 @@ class StatsScreen(tk.Frame):
         self.ax.set_xlabel("Intento de Quiz")
         self.ax.set_ylabel("Porcentaje de Respuestas Correctas (%)")
         self.ax.set_title("Rendimiento en Quizzes por Intento")
-        self.ax.tick_params(axis='x', rotation=45, ha="right") 
+        self.ax.tick_params(axis='x', rotation=45) 
         
         self.figure.tight_layout() # Ajustar el diseño para evitar solapamientos
 
